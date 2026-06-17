@@ -5,15 +5,26 @@ import TaskList from './components/TaskList'
 import FilterBar from './components/FilterBar'
 
 function App() {
-  const [tasks, setTasks] = useState(() => {
-    const saved = localStorage.getItem('todo-tasks')
-    return saved ? JSON.parse(saved) : []
-  })
+  const [tasks, setTasks] = useState([])
   const [filter, setFilter] = useState('all')
+  const [isLoading, setIsLoading] = useState(true)
 
+  // Load tasks from localStorage on first render
   useEffect(() => {
-    localStorage.setItem('todo-tasks', JSON.stringify(tasks))
-  }, [tasks])
+    const saved = localStorage.getItem('todo-tasks')
+    if (saved) {
+      setTasks(JSON.parse(saved))
+    }
+    // Small delay so loading state is visible (feels intentional, not broken)
+    setTimeout(() => setIsLoading(false), 400)
+  }, [])
+
+  // Save tasks whenever they change (skip the very first load)
+  useEffect(() => {
+    if (!isLoading) {
+      localStorage.setItem('todo-tasks', JSON.stringify(tasks))
+    }
+  }, [tasks, isLoading])
 
   const addTask = ({ text, priority }) => {
     const newTask = {
@@ -42,14 +53,12 @@ function App() {
     ))
   }
 
-  // Filter logic
   const filteredTasks = tasks.filter(task => {
     if (filter === 'active') return !task.completed
     if (filter === 'completed') return task.completed
-    return true // 'all'
+    return true
   })
 
-  // Counts for filter buttons
   const taskCounts = {
     all: tasks.length,
     active: tasks.filter(t => !t.completed).length,
@@ -59,15 +68,22 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-900">
       <Header />
-      <main className="max-w-2xl mx-auto px-4 py-8">
+      <main className="max-w-2xl mx-auto px-4 py-6 sm:py-8">
         <TaskInput onAddTask={addTask} />
         <FilterBar filter={filter} setFilter={setFilter} taskCounts={taskCounts} />
-        <TaskList
-          tasks={filteredTasks}
-          onToggle={toggleTask}
-          onDelete={deleteTask}
-          onEdit={editTask}
-        />
+
+        {isLoading ? (
+          <div className="flex justify-center py-10">
+            <div className="w-8 h-8 border-3 border-gray-700 border-t-cyan-400 rounded-full animate-spin"></div>
+          </div>
+        ) : (
+          <TaskList
+            tasks={filteredTasks}
+            onToggle={toggleTask}
+            onDelete={deleteTask}
+            onEdit={editTask}
+          />
+        )}
       </main>
     </div>
   )

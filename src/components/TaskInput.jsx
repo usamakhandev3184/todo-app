@@ -13,13 +13,12 @@ function TaskInput({ onAddTask }) {
   }
 
   return (
-    <div className="bg-gray-800 rounded-xl p-5 mb-6 border border-gray-700">
+    <div className="bg-gray-800 rounded-xl p-4 sm:p-5 mb-6 border border-gray-700">
       <h2 className="text-white font-semibold mb-4 text-lg">
         Add New Task
       </h2>
       <form onSubmit={handleSubmit}>
 
-        {/* Task Input */}
         <input
           type="text"
           value={text}
@@ -30,27 +29,26 @@ function TaskInput({ onAddTask }) {
                      focus:outline-none focus:border-cyan-400 transition-colors"
         />
 
-        {/* Priority + Button Row */}
-        <div className="flex gap-3">
+        {/* Priority + Button — stacks vertically on mobile */}
+        <div className="flex flex-col sm:flex-row gap-3">
 
-          {/* Priority Dropdown */}
           <select
             value={priority}
             onChange={(e) => setPriority(e.target.value)}
             className="bg-gray-700 text-white border border-gray-600 
                        rounded-lg px-3 py-2 focus:outline-none 
-                       focus:border-cyan-400 transition-colors"
+                       focus:border-cyan-400 transition-colors
+                       w-full sm:w-auto"
           >
             <option value="high">🔴 High</option>
             <option value="medium">🟡 Medium</option>
             <option value="low">🟢 Low</option>
           </select>
 
-          {/* Add Button */}
           <button
             type="submit"
-            className="flex-1 bg-cyan-500 hover:bg-cyan-400 text-gray-900 
-                       font-bold py-2 px-6 rounded-lg transition-colors"
+            className="flex-1 bg-cyan-500 hover:bg-cyan-400 active:scale-95 text-gray-900 
+                       font-bold py-2.5 px-6 rounded-lg transition-all duration-150"
           >
             + Add Task
           </button>
