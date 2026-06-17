@@ -13,7 +13,7 @@ function TaskList({ tasks, onToggle, onDelete, onEdit }) {
     <div>
       {tasks.map((task) => (
         <TaskItem
-          key={task.id}
+        key={task._id}
           task={task}
           onToggle={onToggle}
           onDelete={onDelete}
