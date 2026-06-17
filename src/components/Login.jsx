@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import axios from 'axios'
 
-const API_URL = 'http://localhost:5000/api/auth'
+const API_URL = 'https://todo-backend-t8lt.onrender.com/api/auth'
 
 function Login({ onLoginSuccess, switchToRegister }) {
   const [email, setEmail] = useState('')
